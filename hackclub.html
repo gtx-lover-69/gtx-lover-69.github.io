@@ -25,7 +25,7 @@
             }
 
             html {
-                cursor: url('assets/cursor.png'), default;
+                cursor: none;
                 scroll-behavior: smooth;
             }
 
@@ -44,7 +44,28 @@
             }
 
             a, button {
-                cursor: url('assets/hover.png'), pointer;
+                cursor: none;
+            }
+
+
+            .custom-cursor {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 20px;
+                height: 20px;
+                border: solid 3px #fff;
+                border-radius: 50%;
+                z-index: 99;
+                display: block;
+                transform: translate(-50%, -50%);
+                transition: width 0.1s ease-in-out, height 0.1s ease-in-out;
+                pointer-events: none;
+            }
+
+            .active {
+                width: 15px;
+                height: 15px;
             }
 
             h1 {
@@ -250,16 +271,40 @@
                 
             });
 
-            function animateBG() {
-                currentX += (targetX - currentX) * lerpFactor;
-                currentY += (targetY - currentY) * lerpFactor;
+            const cursor = document.querySelector('.custom-cursor')
 
-                body.style.setProperty('--bg-x', `${currentX}%`);
-                body.style.setProperty('--bg-y', `${currentY}%`);
-                requestAnimationFrame(animateBG);
+            document.addEventListener('mouseenter', () => {
+                cursor.style.display = block;
+                requestAnimationFrame(animateCursor);
+            });
+
+            document.addEventListener('mouseleave', () => {
+                cursor.style.display = none;
+            });
+            
+            document.addEventListener(`mousedown`, () => cursor.classList.add('active'))
+            document.addEventListener(`mouseup`, () => cursor.classList.remove('active'))
+
+            let mouseX = 0, mouseY = 0;
+            let cursorX = 0, cursorY = 0;
+            const cursorLerpFactor = 0.3;
+
+            document.addEventListener('mousemove', (evt) => {
+                mouseX = evt.clientX;
+                mouseY = evt.clientY;
+                
+            });
+
+            function animateCursor() {
+                cursorX += (mouseX - cursorX) * cursorLerpFactor;
+                cursorY += (mouseY - cursorY) * cursorLerpFactor;
+
+                cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+
+                requestAnimationFrame(animateCursor);
             }
 
-            requestAnimationFrame(animateBG);
+            requestAnimationFrame(animateCursor);
         </script>
     </body>
 </html>

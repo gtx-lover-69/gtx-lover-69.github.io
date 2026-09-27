@@ -24,13 +24,33 @@
                 }
             }
 
+            .custom-cursor {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 20px;
+                height: 20px;
+                border: solid 3px #fff;
+                border-radius: 50%;
+                z-index: 99;
+                display: block;
+                transform: translate(-50%, -50%);
+                transition: width 0.1s ease-in-out, height 0.1s ease-in-out;
+                pointer-events: none;
+            }
+
+            .active {
+                width: 15px;
+                height: 15px;
+            }
+
             html {
-                cursor: url('assets/cursor.png'), default;
+                cursor: none;
                 scroll-behavior: smooth;
             }
 
             a, button {
-                cursor: url('assets/hover.png'), pointer;
+                cursor: none;
             }
 
             body {
@@ -213,6 +233,7 @@
         </style>
     </head>
     <body>
+        <div class="custom-cursor"></div>
         <h1>MY TOOLS</h1>
         <div class="nav">
             <a href="https://gtx-lover-69.github.io/">/home</a>
@@ -281,36 +302,40 @@
             }
             loadLatestCommit();
 
-            const body = document.body;
+            const cursor = document.querySelector('.custom-cursor')
 
-            let targetX = 0, targetY = 0;
-            let currentX = 0, currentY = 0;
-            const lerpFactor = 0.1;
+            document.addEventListener('mouseenter', () => {
+                cursor.style.display = block;
+                requestAnimationFrame(animateCursor);
+            });
 
-            function detectMob() {
-                return ((window.innerWidth <= 720));
-            }
+            document.addEventListener('mouseleave', () => {
+                cursor.style.display = none;
+            });
+            
+            document.addEventListener(`mousedown`, () => cursor.classList.add('active'))
+            document.addEventListener(`mouseup`, () => cursor.classList.remove('active'))
 
-            body.addEventListener('mousemove', (e) => {
-                const rect = body.getBoundingClientRect();
-                let isMobile = detectMob;
-                if (!isMobile()) {
-                    targetX = 0 -((e.clientX - rect.left) / rect.width);
-                    targetY = 0 -((e.clientY - rect.top) / rect.height);
-                }
+            let mouseX = 0, mouseY = 0;
+            let cursorX = 0, cursorY = 0;
+            const cursorLerpFactor = 0.3;
+
+            document.addEventListener('mousemove', (evt) => {
+                mouseX = evt.clientX;
+                mouseY = evt.clientY;
                 
             });
 
-            function animateBG() {
-                currentX += (targetX - currentX) * lerpFactor;
-                currentY += (targetY - currentY) * lerpFactor;
+            function animateCursor() {
+                cursorX += (mouseX - cursorX) * cursorLerpFactor;
+                cursorY += (mouseY - cursorY) * cursorLerpFactor;
 
-                body.style.setProperty('--bg-x', `${currentX}%`);
-                body.style.setProperty('--bg-y', `${currentY}%`);
-                requestAnimationFrame(animateBG);
+                cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+
+                requestAnimationFrame(animateCursor);
             }
 
-            requestAnimationFrame(animateBG);
+            requestAnimationFrame(animateCursor);
         </script>
     </body>
 </html>
