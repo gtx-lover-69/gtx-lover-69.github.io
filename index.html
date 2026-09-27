@@ -437,6 +437,7 @@
     </head>
 
     <body>
+        <div class="custom-cursor"><img src="assets/cursor.png"></div>
         <h1 class="title-desktop">MATTEO'S SITE</h1>
         <h1 class="title-mobile">MATTEO'S<br>SITE</h1>
         <div class="main-container">
@@ -508,26 +509,6 @@
                 }
             }
             loadLatestCommit();
-
-            const body = document.body;
-
-            let targetX = 0, targetY = 0;
-            let currentX = 0, currentY = 0;
-            const lerpFactor = 0.1;
-
-            function detectMob() {
-                return ((window.innerWidth <= 720));
-            }
-
-            body.addEventListener('mousemove', (e) => {
-                const rect = body.getBoundingClientRect();
-                let isMobile = detectMob;
-                if (!isMobile()) {
-                    targetX = 0 -((e.clientX - rect.left) / rect.width);
-                    targetY = 0 -((e.clientY - rect.top) / rect.height);
-                }
-                
-            });
 
             const cursor = document.querySelector('.custom-cursor')
 
