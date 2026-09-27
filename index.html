@@ -9,8 +9,58 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Matteo's Site</title>
         <script src="https://kit.fontawesome.com/885a98fbc7.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="style.css">
         <style>
+            @keyframes fade-up {
+                0% {
+                    opacity: 0;
+                    transform: translateY(10px) scale(0.95);
+                    filter: blur(10px);
+                }
+
+                100% {
+                    opacity: 1;
+                    transform: translateY(0px) scale(1);
+                    filter: blur(0px);
+                }
+            }
+
+
+            html {
+                cursor: url('assets/cursor.png'), default;
+                scroll-behavior: smooth;
+            }
+
+            body {
+                background-color: #000;
+                margin: 0;
+                padding: 0;
+                
+                width: 100%;
+                height: 100vh;
+
+                --bg-x: 0%;
+                --bg-y: 0%;
+                
+                background-image: linear-gradient(rgba(55, 55, 55, 1) .1em, transparent .1em), linear-gradient(90deg, rgba(55, 55, 55, 1) .1em, transparent .1em);
+                background-size: 3em 3em;
+                background-position: var(--bg-x) var(--bg-y);
+            }
+
+            a, button {
+                cursor: url('assets/hover.png'), pointer;
+            }
+
+            .main-container {
+                box-sizing: border-box;
+                padding: 0.8em;
+                display: grid;
+                grid-template-columns: 1fr 3fr;
+                align-items: start;
+                gap: 0.5em;
+                width: 95%;
+                margin: auto;
+            }
+
             .items{
                 animation: fade-up 0.6s 0.2s both;
                 background-color: #000;
@@ -236,13 +286,66 @@
             .club:hover p {
                 scale: 1.1;
             }
-            
+
+            .stickyboi {
+                box-sizing: border-box;
+                padding: 0.3em;
+                color: #fff;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                margin: 0 auto;
+                z-index: 10;
+                backdrop-filter: blur(15px);
+            }
+
+            .stickyboi a {
+                font-weight: bold;
+                font-size: 1vw;
+                text-decoration: none;
+                color: #9cccff;
+            }
+
+            .stickyboi p {
+                font-size: 1vw;
+            }
+
+            h1 {
+                animation: fade-up 0.6s 0.1s both;
+                text-align: center;
+                font-family: 'Climate Crisis', sans-serif;
+                color: #fff;
+                font-size: 8vw;
+                letter-spacing: 0.05em;
+                line-height: 1;
+                margin: 0;
+                padding: 0;
+                transition-duration: 0.3s;
+                transition-timing-function: ease-in-out;
+            }
+
+            p {
+                animation: fade-up 0.6s 0.3s both;
+                text-align: center;
+                font-family: 'Space Grotesk', monospace;
+                font-size: 2vw;
+                letter-spacing: 0.01em;
+                line-height: 1.2;
+                margin: 0;
+                padding: 0;
+            }
+
             .title-mobile {
                 font-size: 12vw;
                 display: none;
             }
 
             @media (max-width: 720px) {
+                .body {
+                    position: fixed;
+                }
+
                 .title-desktop {
                     display: none;
                 }
@@ -272,8 +375,20 @@
                     font-size: 4vw;
                 }
 
+                h1 {
+                    padding-top: 0.1em;
+                }
+
                 .items p {
                     font-size: 6vw;
+                }
+
+                .stickyboi a {
+                    font-size: 2vw;
+                }
+
+                .stickyboi p {
+                    font-size: 2vw;
                 }
 
                 .items {
