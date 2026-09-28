@@ -263,26 +263,34 @@
                 
             });
 
-            const cursor = document.querySelector('.custom-cursor')
+            const cursor = document.querySelector('.custom-cursor')            
+            let text = false;
+            let scale = 1;
 
             document.addEventListener('mouseenter', () => {
-                cursor.style.display = block;
+                cursor.style.display = 'block';
             });
 
             document.addEventListener('mouseleave', () => {
-                cursor.style.display = none;
+                cursor.style.display = 'none';
             });
-            
-            document.addEventListener(`mousedown`, () => cursor.classList.add('active'))
-            document.addEventListener(`mouseup`, () => cursor.classList.remove('active'))
+
+            document.addEventListener(`mousedown`, () => {
+                if (!text) {cursor.classList.add('active')}
+                else {scale = 0.8}
+            })
+
+            document.addEventListener(`mouseup`, () => {
+                if (!text) {cursor.classList.remove('active')}
+                else {scale = 1}
+            })
 
             let mouseX = 0, mouseY = 0;
             let cursorX = 0, cursorY = 0;
             const cursorLerpFactor = 0.3;
             
             const pointer = cursor.querySelector('img');
-            let text = false;
-
+            
             document.addEventListener('mouseover', (e) => {
                 if (e.target.closest('input, textarea, [contenteditable]')) {
                     pointer.src = 'assets/text-cursor.png';
@@ -319,7 +327,7 @@
                 angle += diff * 0.3;
                 angle = ((angle % 360) + 360) % 360;
 
-                cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%) rotate(${angle}deg)`;
+                cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%) rotate(${angle}deg) scaleY(${scale})`;
 
                 requestAnimationFrame(animateCursor);
             }
