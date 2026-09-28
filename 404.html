@@ -43,10 +43,9 @@
                 background-position: var(--bg-x) var(--bg-y);
             }
 
-            a, button {
+            a, button, input {
                 cursor: none;
             }
-
 
             .custom-cursor {
                 position: fixed;
@@ -54,14 +53,15 @@
                 left: 0;
                 z-index: 99;
                 display: block;
-                transform: translate(-50%, -50%);
-                transition: width 0.1s ease-in-out, height 0.1s ease-in-out;
                 pointer-events: none;
             }
 
-            .active {
-                width: 15px;
-                height: 15px;
+            .custom-cursor img {
+                transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.55, 1.5);
+            }
+
+            .active img{
+                transform: scale(0.8);
             }
 
             h1 {
@@ -151,6 +151,12 @@
             a:hover {
                 text-shadow: 0px 0px 8px white;
             }
+
+            .countdown {
+                transition-duration: 1s;
+                animation: fade-up 0.6s 1.2s both;
+                font-weight: bold;
+            }
             
 
             .stickyboi {
@@ -206,7 +212,8 @@
         </div>
         <div class="main-container">
             <p><b>Woah! You found a secret page :O</b></p>
-            <p>This is actually a <b>404</b>... Nothing's here but this guy. I can't get rid of him.</p>
+            <p>This is actually a <b>404</b>... Nothing's here but this guy.<br>Help me name him! <br><b><p class="countdown"></p></b></p>
+            <input>
             <div class="container">
 <pre class="cheese" style="color:lightgray">              
             (\_/)
@@ -276,7 +283,6 @@
 
             document.addEventListener('mouseenter', () => {
                 cursor.style.display = block;
-                requestAnimationFrame(animateCursor);
             });
 
             document.addEventListener('mouseleave', () => {
@@ -289,23 +295,73 @@
             let mouseX = 0, mouseY = 0;
             let cursorX = 0, cursorY = 0;
             const cursorLerpFactor = 0.3;
+            
+            const pointer = cursor.querySelector('img');
+            let text = false;
 
+            document.addEventListener('mouseover', (e) => {
+                if (e.target.closest('input, textarea, [contenteditable]')) {
+                    pointer.src = 'assets/text-cursor.png';
+                    text = true;
+                } else {
+                    pointer.src = 'assets/cursor.png';
+                    text = false;
+                }
+            });
+            
             document.addEventListener('mousemove', (evt) => {
                 mouseX = evt.clientX;
                 mouseY = evt.clientY;
                 
             });
 
+            let angle = 0;
+            let target = 0;
+
             function animateCursor() {
+                const dx = mouseX - cursorX;
+                const dy = mouseY - cursorY;
+
                 cursorX += (mouseX - cursorX) * cursorLerpFactor;
                 cursorY += (mouseY - cursorY) * cursorLerpFactor;
+                
+                if (text) {
+                    target = Math.round(angle / 180) * 180;
+                } else if (Math.hypot(dx, dy) > 2) {
+                    target = Math.atan2(dy, dx) * 180 / Math.PI + 90;
+                }
+                    
+                const diff = ((target - angle + 540) % 360) - 180;
+                angle += diff * 0.3;
+                angle = ((angle % 360) + 360) % 360;
 
-                cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+                cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%) rotate(${angle}deg)`;
 
                 requestAnimationFrame(animateCursor);
             }
 
             requestAnimationFrame(animateCursor);
+
+            var countDownDate = new Date("Oct 31, 2026 00:00:00").getTime();
+
+            countdown = document.querySelector('.countdown');
+
+            var x = setInterval(function() {
+                var now = new Date().getTime();
+                var distance = countDownDate - now;
+
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdown.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s " + "left";
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    countdown.innerHTML = "too late!";
+                }
+            }, 500);
         </script>
     </body>
 </html>
