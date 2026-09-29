@@ -43,6 +43,8 @@
             }
 
             .custom-cursor img {
+                width: auto;
+                height: 32px;
                 transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.55, 1.5);
             }
 
@@ -329,7 +331,7 @@
 
             let mouseX = 0, mouseY = 0;
             let cursorX = 0, cursorY = 0;
-            const cursorLerpFactor = 0.3;
+            const cursorLerpFactor = 0.2;
             
             const pointer = cursor.querySelector('img');
             
@@ -366,7 +368,7 @@
                 }
                     
                 const diff = ((target - angle + 540) % 360) - 180;
-                angle += diff * 0.3;
+                angle += diff * cursorLerpFactor;
                 angle = ((angle % 360) + 360) % 360;
 
                 cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%) rotate(${angle}deg) scaleY(${scale})`;
