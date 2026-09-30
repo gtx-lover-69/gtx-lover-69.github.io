@@ -59,7 +59,7 @@
             .custom-cursor img {
                 width: auto;
                 height: 32px;
-                transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.55, 1.5);
+                transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.55, 1.5), opacity 0.2s ease, filter 0.2s ease;
             }
 
             .active img{
@@ -255,11 +255,16 @@
             let scale = 1;
 
             document.addEventListener('mouseenter', () => {
-                cursor.style.display = 'block';
+                let mobile = detectMob();
+                if (!mobile) {
+                    pointer.style.opacity = '100';
+                    pointer.style.filter = 'blur(0px)';
+                } else {pointer.style.opacity = '0';}
             });
 
             document.addEventListener('mouseleave', () => {
-                cursor.style.display = 'none';
+                pointer.style.opacity = '0';
+                pointer.style.filter = 'blur(5px)';
             });
 
             document.addEventListener(`mousedown`, () => {
@@ -274,7 +279,7 @@
 
             let mouseX = 0, mouseY = 0;
             let cursorX = 0, cursorY = 0;
-            const cursorLerpFactor = 0.2;
+            const cursorLerpFactor = 0.25;
             
             const pointer = cursor.querySelector('img');
             
@@ -314,8 +319,10 @@
                 angle += diff * cursorLerpFactor;
                 angle = ((angle % 360) + 360) % 360;
 
-                cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%) rotate(${angle}deg) scaleY(${scale})`;
-
+                if (!mobile) {
+                    cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%) rotate(${angle}deg) scaleY(${scale})`;
+                }
+                
                 requestAnimationFrame(animateCursor);
             }
 
