@@ -509,6 +509,10 @@
                 }
             }
             loadLatestCommit();
+            
+            function detectMob() {
+                return ((window.innerWidth <= 720));
+            }
        
             const cursor = document.querySelector('.custom-cursor')            
             let text = false;
@@ -582,7 +586,7 @@
                 if (!mobile) {
                     cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%) rotate(${angle}deg) scaleY(${scale})`;
                 }
-                
+
                 requestAnimationFrame(animateCursor);
             }
 

@@ -286,6 +286,10 @@
             }
             loadLatestCommit();
 
+            function detectMob() {
+                return ((window.innerWidth <= 720));
+            }
+
             const cursor = document.querySelector('.custom-cursor')            
             let text = false;
             let scale = 1;
@@ -358,7 +362,7 @@
                 if (!mobile) {
                     cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%) rotate(${angle}deg) scaleY(${scale})`;
                 }
-                
+
                 requestAnimationFrame(animateCursor);
             }
 
