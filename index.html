@@ -509,7 +509,7 @@
                 }
             }
             loadLatestCommit();
-            
+
             function detectMob() {
                 return ((window.innerWidth <= 720));
             }
@@ -582,6 +582,8 @@
                 const diff = ((target - angle + 540) % 360) - 180;
                 angle += diff * cursorLerpFactor;
                 angle = ((angle % 360) + 360) % 360;
+
+                let mobile = detectMob();
 
                 if (!mobile) {
                     cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%) rotate(${angle}deg) scaleY(${scale})`;
