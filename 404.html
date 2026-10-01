@@ -251,6 +251,13 @@
                 color: #00ff7f;
             }
 
+            button:disabled {
+                background-color: #000;
+                color: #00ff7f;
+                border-color: #00ff7f;
+                cursor: none;
+            }
+
             @media (max-width: 720px) {
                 p, a {
                     font-size: 4vw;
@@ -287,7 +294,7 @@
             <p>This is actually a <b>404</b>... Nothing's here but this guy.<br>Help me name him! <br><b><span class="countdown"></span></b></p>
             <form id="form">
                 <input id="namer" type="text" class="namer" placeholder="What should I call him?" required>
-                <button type="submit">Send to Discord</button>
+                <button id="submit-btn" type="submit">Send to Discord</button>
             </form>
             <div class="container">
 <pre class="cheese" style="color:lightgray">              
@@ -316,7 +323,8 @@
         </div>
         <script>
             const nameField = document.getElementById('namer');
-
+            const submitBtn = document.getElementById('submit-btn');
+            
             document.getElementById('form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const name = document.getElementById('namer').value;
@@ -326,8 +334,9 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ content: "Suggested rat name: " + "**" + name + "**" })
                 });
-                
-                alert('Sent!');
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Thank you!';
             });
 
             nameField.addEventListener('invalid', (e) => {
@@ -365,6 +374,7 @@
 
             const cursor = document.querySelector('.custom-cursor')            
             let text = false;
+            let disabled = false;
             let scale = 1;
 
             document.addEventListener('mouseenter', () => {
@@ -400,9 +410,15 @@
                 if (e.target.closest('input, textarea, [contenteditable]')) {
                     pointer.src = 'assets/text-cursor.png';
                     text = true;
+                    disabled = false;
+                } else if (e.target.closest('button:disabled')) {
+                    pointer.src = 'assets/no-cursor.png'; 
+                    text = false;
+                    disabled = true;
                 } else {
                     pointer.src = 'assets/cursor.png';
                     text = false;
+                    disabled = false;
                 }
             });
             
@@ -423,6 +439,8 @@
                 cursorY += (mouseY - cursorY) * cursorLerpFactor;
                 
                 if (text) {
+                    target = Math.round(angle / 180) * 180;
+                } else if (disabled) {
                     target = Math.round(angle / 180) * 180;
                 } else if (Math.hypot(dx, dy) > 2) {
                     target = Math.atan2(dy, dx) * 180 / Math.PI + 90;
