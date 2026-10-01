@@ -30,6 +30,10 @@
             }
 
             body {
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
                 background-color: #000;
                 color: #fff;
                 margin: 0;
@@ -179,7 +183,7 @@
             .stickyboi a {
                 font-size: 1vw;
                 text-decoration: none;
-                color: #9cccff;
+                color: #00ff7f;
             }
 
             .stickyboi p {
@@ -199,11 +203,56 @@
                 font-family: 'Space Grotesk', monospace;
                 font-weight: bold;
                 font-size: 2vw;
+                transition-duration: 0.3s;
             }
 
             .namer:focus {
                 outline: none;
 
+            }
+
+            .namer::placeholder {
+                color: #fff;
+                opacity: 0.5;
+            }
+
+            .namer:hover {
+                border-color: #00ff7f;
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5em;
+            }
+
+            button {
+                box-sizing: border-box;
+                animation: fade-up 0.6s 0.3s both;
+                background-color: #00ff7f;
+                color: #000;
+                border: solid 2px #00ff7f;
+                border-radius: 15px;
+                justify-content: center;
+                margin: auto auto;
+                padding: 0.3em;
+                font-family: 'Space Grotesk', monospace;
+                font-weight: bold;
+                font-size: 2vw;
+                transition-duration: 0.3s;
+            }
+
+            button:hover {
+                background-color: #000;
+                color: #00ff7f;
+            }
+
+            button:focus {
+                outline: none;
+                background-color: #000;
+                color: #00ff7f;
             }
 
             @media (max-width: 720px) {
@@ -240,7 +289,10 @@
         <div class="main-container">
             <p><b>Woah! You found a secret page :O</b></p>
             <p>This is actually a <b>404</b>... Nothing's here but this guy.<br>Help me name him! <br><b><span class="countdown"></span></b></p>
-            <input class="namer">
+            <form id="form">
+                <input id="namer" type="text" class="namer" placeholder="What should I call him?" required>
+                <button type="submit">Send to Discord</button>
+            </form>
             <div class="container">
 <pre class="cheese" style="color:lightgray">              
             (\_/)
@@ -267,6 +319,31 @@
             <p><a id="commit-link" href="#" style="color:#fff;">loading commit...</a></p>
         </div>
         <script>
+            const nameField = document.getElementById('namer');
+
+            document.getElementById('form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('namer').value;
+                
+                await fetch('https://discord.com/api/webhooks/1555270433245503610/vlbZdtqoLrVy6JdmEgN7xZrmAAfiZXoDPzPiR59z73FPY09dZcd-TnWG_RldVew-r5Fv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: "Suggested rat name: " + "**" + name + "**" })
+                });
+                
+                alert('Sent!');
+            });
+
+            nameField.addEventListener('invalid', (e) => {
+                if (nameField.validity.valueMissing) {
+                    nameField.setCustomValidity('An empty name, seriously?');
+                }
+            });
+
+            nameField.addEventListener('input', () => {
+                nameField.setCustomValidity("");
+            });
+
             async function loadLatestCommit() {
                 const owner = "gtx-lover-69";
                 const repo = "gtx-lover-69.github.io";
