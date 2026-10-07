@@ -363,6 +363,32 @@
             let angle = 0;
             let target = 0;
 
+            var timestamp = null;
+            let lastX = 0, lastY = 0;
+            let lastTime = performance.now();
+            let speed = 0;
+
+            function blurCursor(now) {
+                const dt = now - lastTime;
+
+                if (dt > 0) {
+                    const dx = mouseX - lastX;
+                    const dy = mouseY - lastY;
+                    const instant = Math.hypot(dx, dy) / dt;
+                    speed += (instant - speed) * 0.7;
+                }
+
+                lastX = mouseX;
+                lastY = mouseY;
+                lastTime = now;
+
+                const blur = Math.min(speed, 3);
+                pointer.style.filter = `blur(${blur}px)`;
+                scale = 1 + blur * 0.1;
+
+                requestAnimationFrame(blurCursor);
+            }
+
             function animateCursor() {
                 const dx = mouseX - cursorX;
                 const dy = mouseY - cursorY;
@@ -390,6 +416,7 @@
             }
 
             requestAnimationFrame(animateCursor);
+            requestAnimationFrame(blurCursor);
         </script>
     </body>
 </html>
