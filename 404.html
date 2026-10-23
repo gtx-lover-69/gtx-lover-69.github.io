@@ -402,7 +402,7 @@
 
             let mouseX = 0, mouseY = 0;
             let cursorX = 0, cursorY = 0;
-            const cursorLerpFactor = 0.3;
+            const cursorLerpFactor = 0.5;
             
             const pointer = cursor.querySelector('img');
             
@@ -487,6 +487,9 @@
 
             requestAnimationFrame(animateCursor);
             requestAnimationFrame(blurCursor);
+            if (detectMob()) {
+                pointer.style.opacity = '0';
+            }
 
             var countDownDate = new Date("Oct 31, 2026 00:00:00").getTime();
 

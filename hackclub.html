@@ -283,7 +283,7 @@
 
             let mouseX = 0, mouseY = 0;
             let cursorX = 0, cursorY = 0;
-            const cursorLerpFactor = 0.25;
+            const cursorLerpFactor = 0.5;
             
             const pointer = cursor.querySelector('img');
             
@@ -360,6 +360,9 @@
 
             requestAnimationFrame(animateCursor);
             requestAnimationFrame(blurCursor);
+            if (detectMob()) {
+                pointer.style.opacity = '0';
+            }
         </script>
     </body>
 </html>
