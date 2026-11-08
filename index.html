@@ -216,6 +216,26 @@
                 gap: 0.2em;
                 text-decoration: none;
             }
+
+            .uptime {
+                font-family: 'Space Grotesk', monospace;
+                display: flex;
+                flex-direction: row;
+                background-color: #aa55ff;
+                color: #fff;
+                text-align: center;
+                border-radius: 8px;
+                border: 2px solid #aa55ff;
+                font-size: 1.5em;
+                align-items: center;
+                justify-content: center;
+                align-content: center;
+                justify-items: center;
+                padding: 0.3em;
+                transition-duration: 0.3s;
+                gap: 0.2em;
+                text-decoration: none;
+            }
             
             .tools {
                 font-family: 'Space Grotesk', monospace;
@@ -375,12 +395,12 @@
                     display: block;
                 }
 
-                .widgets p:not(.coding p) {
+                .widgets p:not(.coding p):not(.uptime p) {
                     display: none;
                 }
 
                 .widgets {
-                    grid-template-columns: 1fr 1fr 1fr;
+                    grid-template-columns: 1fr 1fr 1fr 1fr;
                     width: 100%;
                 }
 
@@ -388,11 +408,23 @@
                     font-size: 10vw;
                 }
 
+                .coding, .uptime, .github, .discord {
+                    padding: 0.15em;
+                }
+
                 .coding i, .coding svg{
                     display: none;
                 }
 
                 .coding p {
+                    font-size: 4vw;
+                }
+
+                .uptime i, .uptime svg{
+                    display: none;
+                }
+
+                .uptime p {
                     font-size: 4vw;
                 }
 
@@ -455,6 +487,10 @@
                     <i class="fa-solid fa-code"></i>
                     <p id="coding-time">coding for a long time...</p>
                 </div>
+                <div class="uptime">
+                    <i class="fa-solid fa-server"></i>
+                    <p id="uptime">loading server status...</p>
+                </div>
             </div>
             <div class="items">
                 <p style="color: #fff; grid-area: title;">more stuff</p>
@@ -513,6 +549,26 @@
             function detectMob() {
                 return ((window.innerWidth <= 720));
             }
+
+            async function loadUptime() {
+                const el = document.getElementById("uptime");
+                try {
+                    const res = await fetch("https://gist.githubusercontent.com/gtx-lover-69/3524706eee513587d6ab72675d48fa98/raw/uptime.json?t=" + Date.now());
+                    const d = await res.json();
+                    const age = (Date.now() - new Date(d.updated)) / 60000;
+                    if (age > 15) { el.textContent = "Server offline"; return; }
+                    const days = Math.floor(d.seconds / 86400);
+                    const hrs = Math.floor(d.seconds % 86400 / 3600);
+                    const mins = Math.floor(d.seconds % 3600 / 60);
+                    el.innerHTML = `Uptime<br> ${days}d ${hrs}h ${mins}m`;
+                } catch (err) {
+                    console.error("Uptime fetch failed:", err);
+                    el.textContent = "Status unavailable";
+                }
+            }
+            loadUptime();
+            setInterval(loadUptime, 60000);
+            setInterval(loadCodingTime, 60000);
        
             const cursor = document.querySelector('.custom-cursor')            
             let text = false;
